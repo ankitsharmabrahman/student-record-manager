@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import StudentForm from "./components/StudentForm";
+import StudentList from "./components/StudentList";
+import "./App.css";
 
 function App() {
+  const [students, setStudents] = useState([]);
+
+  const addStudent = (student) => {
+    setStudents([...students, { id: Date.now(), ...student }]);
+  };
+
+  const deleteStudent = (id) => {
+    setStudents(students.filter((s) => s.id !== id));
+  };
+
+  const updateStudent = (id, updatedStudent) => {
+    setStudents(
+      students.map((s) => (s.id === id ? { ...s, ...updatedStudent } : s))
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      <h1>🎓 Student Record Manager</h1>
+      <StudentForm addStudent={addStudent} />
+      <StudentList
+        students={students}
+        deleteStudent={deleteStudent}
+        updateStudent={updateStudent}
+      />
     </div>
   );
 }
